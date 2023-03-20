@@ -14,7 +14,6 @@ Quindi, nel caso specifico della stringa "jeVTGDnzL0P4n63NIWuEaw==" decriptata c
 5. Il testo in chiaro risultante dalla decriptazione viene convertito in una stringa utilizzando il set di caratteri UTF-8.
 """
 
-
 import base64
 from Crypto.Cipher import AES
 import unicodedata
@@ -27,9 +26,9 @@ import datetime
 
 KEY = "958BAE842AA8D07765F7EF9E5D0CDEC6"
 data= []
-columdToDecrypt = ['D','I','N'] 
-inputFile = "C:\Git\Golden Gouse\Decrypt AES-128-ECB\memberBindQuery.csv"
-outputFile = "C:\Git\Golden Gouse\Decrypt AES-128-ECB\TextToColumn.xlsx"
+columdToDecrypt = ['D','I','M'] 
+inputFile = "C:\Git\Golden Goose\Decrypt AES-128-ECB\memberBindQuery.csv"
+outputFile = "C:\Git\Golden Goose\Decrypt AES-128-ECB\TextToColumn.xlsx"
 sheetName = 'Decrypt'
 
 def removeChar(list):
@@ -45,13 +44,14 @@ def textToColumn(inputFilePath,workbook):
     worksheet = workbook.add_worksheet(sheetName)
     #il file sorgente originale viene aperto in formatok utf-16 per la gestione dei caratteri speciali
     with open(inputFilePath, newline='',encoding='utf-16') as input_file:
-        reader = csv.reader(input_file, delimiter='!')
+        #excel prevede un delimiter di un solo carattere. Prendo ogni riga, la gestisco come una stringa 
+        #e uso il metodo split per estrarmi ij valori delle celle
+        reader = csv.reader(input_file)
         for row in reader:
-            #il delimiter originale è @!@, quindi rimuovo tutte le @
-            row = removeChar(row)
+            splittedRow = row[0].split('@!@')
             #il valore processato viene inseito nella corrispettiva riga e colonna
-            for i in range(len(row)):
-                worksheet.write(rowIndex, i, row[i])
+            for i in range(len(splittedRow)):
+                worksheet.write(rowIndex, i, splittedRow[i])
             rowIndex += 1
 
 #rimuove tutti i caratteri speciai ascii e non quali \n, \t, \x06, \x10 ecc
@@ -61,19 +61,14 @@ def remove_control_chars(s):
 def decrypt(encyptedString):
     # Converto la chiave esadecimale in una sequenza di byte
     byteKey = bytes.fromhex(KEY)
-
     # Decodifico la stringa Base64 in una sequenza di byte
     encrypted_data = base64.b64decode(encyptedString)
-
     # Inizializzo il cifrario AES in modalità ECB con PKCS5Padding come padding
     cipher = AES.new(byteKey, AES.MODE_ECB)
-
     # Decripto i dati criptati
     decrypted_data = cipher.decrypt(encrypted_data)
-
     # Rimuovo i caratteri di controllo
     plaintext = remove_control_chars(decrypted_data.decode('utf-8'))
-
     # Restituisco il risultato
     return plaintext
 
@@ -127,6 +122,8 @@ def main():
     workbook.close()
     #eseguo il processo di decrypt 
     decryptFile(outputFile)
+
+
 
 if __name__ == '__main__':
     main()
