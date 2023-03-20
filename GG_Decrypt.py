@@ -25,7 +25,6 @@ import datetime
 
 
 KEY = "958BAE842AA8D07765F7EF9E5D0CDEC6"
-data= []
 columdToDecrypt = ['D','I','M'] 
 inputFile = "C:\Git\Golden Goose\Decrypt AES-128-ECB\memberBindQuery.csv"
 outputFile = "C:\Git\Golden Goose\Decrypt AES-128-ECB\TextToColumn.xlsx"
@@ -73,7 +72,7 @@ def decrypt(encyptedString):
     return plaintext
 
 #transcodifica data da formato unix timestamp a data
-def fromUnixToDate(unix_timestamp):
+def fromUnixToDate(unix_timestamp): #esempio chiamata: print(fromUnixToDate(int(decrypt(cell.value))))
     data = datetime.datetime.fromtimestamp(unix_timestamp)
     data_str = data.strftime("%Y/%m/%d %H:%M:%S")
     return data_str
@@ -102,14 +101,9 @@ def decryptFile(outputFile):
             cellValue = worksheet.cell(row = rowNumber, column = numFromLetter(columns))
             #la colonna N è della data, quindi occorre applicare anche la funzione da timestamp unix a date
             #decripto ogni valore delle celle presenti in columdToDecrypt
-            if columns == 'N':
-                print(fromUnixToDate(int(decrypt(cell.value))))
-                cellValue.value = fromUnixToDate(int(decrypt(cell.value)))
-            else:
-                print(decrypt(cell.value))
-                cellValue.value = decrypt(cell.value)
+            print(decrypt(cell.value))
+            cellValue.value = decrypt(cell.value)
             rowNumber +=1
-
             workbook.save(filename=outputFile)
 
 def main():
