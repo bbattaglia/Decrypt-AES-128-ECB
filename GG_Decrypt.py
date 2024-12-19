@@ -26,8 +26,8 @@ import datetime
 
 KEY = "958BAE842AA8D07765F7EF9E5D0CDEC6"
 columdToDecrypt = ['D','I','M'] 
-inputFile = "C:\Git\Golden Goose\Decrypt AES-128-ECB\memberBindQuery.csv"
-outputFile = "C:\Git\Golden Goose\Decrypt AES-128-ECB\TextToColumn.xlsx"
+inputFile = "path\memberBindQuery.csv"
+outputFile = "path\Decrypt AES-128-ECB\TextToColumn.xlsx"
 sheetName = 'Decrypt'
 
 def removeChar(list):
